@@ -19,14 +19,14 @@ class InstagramTest extends TestCase
             'path' => $sessionFolder
         ]);
         $instanceCache = CacheManager::getInstance('files');
-        self::$instagram = Instagram::withCredentials('raiym', 'uvebzdxgbkt2T5_K', $instanceCache);
+        self::$instagram = Instagram::withCredentials('raiym', 'youneverknow', $instanceCache);
         self::$instagram->login();
 
     }
 
     public function testGetAccountByUsername()
     {
-        $account = Instagram::getAccount('kevin');
+        $account = self::$instagram->getAccount('kevin');
         $this->assertEquals('kevin', $account->getUsername());
         $this->assertEquals('3', $account->getId());
     }
@@ -48,13 +48,13 @@ class InstagramTest extends TestCase
 
     public function testGetMedias()
     {
-        $medias = Instagram::getMedias('kevin', 80);
+        $medias = self::$instagram->getMedias('kevin', 80);
         $this->assertEquals(80, sizeof($medias));
     }
 
     public function testGet100Medias()
     {
-        $medias = Instagram::getMedias('kevin', 100);
+        $medias = self::$instagram->getMedias('kevin', 100);
         $this->assertEquals(100, sizeof($medias));
     }
 
@@ -78,13 +78,13 @@ class InstagramTest extends TestCase
 
     public function testGetLocationTopMediasById()
     {
-        $medias = self::$instagram->getLocationTopMediasById(1);
+        $medias = self::$instagram->getCurrentTopMediasByTagName(1);
         $this->assertEquals(9, count($medias));
     }
 
     public function testGetLocationMediasById()
     {
-        $medias = self::$instagram->getLocationMediasById(1);
+        $medias = self::$instagram->getMediasByLocationId(1);
         $this->assertEquals(12, count($medias));
     }
 
@@ -96,7 +96,7 @@ class InstagramTest extends TestCase
 
     public function testGetMediaByTag()
     {
-        $medias = self::$instagram->getTopMediasByTagName('hello');
+        $medias = self::$instagram->getMediasByTag('hello');
         echo json_encode($medias);
     }
 
@@ -120,6 +120,9 @@ class InstagramTest extends TestCase
     {
         $comments = self::$instagram->getMediaCommentsByCode('BR5Njq1gKmB', 40);
         //TODO: check why returns less comments
-        $this->assertEquals(31, sizeof($comments));
+        $this->assertEquals(32, sizeof($comments));
     }
+
+    // TODO: Add test getMediaById
+    // TODO: Add test getLocationById
 }
